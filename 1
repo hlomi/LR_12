@@ -1,0 +1,87 @@
+import json
+
+
+numbers = [{
+     "Name": "TEODOR",
+     "Telefon": "012354265"},
+    {"Name": "NIKITA",
+     "Telefon": "321435645"},
+    {"Name": "ANTON",
+     "Telefon": "123456789"},
+    {"Name": "KIRIL",
+     "Telefon": "234567890"},
+    {"Name": "VASYL",
+     "Telefon": "345678901"},
+    {"Name": "TOCHA",
+     "Telefon": "456789012"},
+    {"Name": "JATI",
+     "Telefon": "567890123"},
+    {"Name": "JANA",
+     "Telefon": "678901234"},
+    {"Name": "ALIS",
+     "Telefon": "789012345"},
+    {"Name": "VITA",
+     "Telefon": "890123456"}]
+
+
+with open("data.json", "wt") as file:
+    json.dump(numbers, file)
+
+while True:
+    print("Виберіть опцію для продовження: \n1. Додати, \n2. Переглянути дані, \n3. Знайти телефон особи \n4. Знайти особу за телефоном \n5. Вихід")
+    x = input("Виберіть варіант:\n")
+    
+    try:
+        x = int(x)
+
+        if x == 1:
+            with open("data.json", "r+") as file:
+                number = json.load(file)
+                print("Додати: ")
+                Name = input("Name: ")
+                Telefon = input("Telefon: ")
+                number.append({"Name": Name, "Telefon": Telefon})
+                file.seek(0)  
+                json.dump(number, file)
+                file.truncate()  
+
+        elif x == 2:
+            with open("data.json", "rt") as file:
+                number = json.load(file)
+                print(*number, sep='\n')
+
+        elif x == 3:
+            name_to_search = input("Введіть прізвище для пошуку телефону: ")
+            with open("data.json", "rt") as file:
+                number = json.load(file)
+
+            found = False
+            for entry in number:
+                if entry["Name"].lower() == name_to_search.lower():
+                    print(f"Телефон для {name_to_search}: {entry['Telefon']}")
+                    found = True
+                    break
+            if not found:
+                print(f"Телефон для {name_to_search} не знайдено.")
+
+        elif x == 4:
+            telefon_to_search = input("Введіть номер телефону для пошуку прізвища: ")
+            with open("data.json", "rt") as file:
+                number = json.load(file)
+
+            found = False
+            for entry in number:
+                if entry["Telefon"] == telefon_to_search:  
+                    print(f"Прізвище для {telefon_to_search}: {entry['Name']}")
+                    found = True
+                    break
+            if not found:
+                print(f"Інформація про номер {telefon_to_search} не знайдена.")
+
+        elif x == 5:
+            quit(0)
+
+    except ValueError:
+        print("Не правильно введене значення, наступного разу будьте уважнішими!")
+    except Exception as e:
+        print(f"Сталася помилка: {e}")
